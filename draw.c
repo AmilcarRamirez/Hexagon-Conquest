@@ -3,10 +3,12 @@
 #include "conio.h"
 #include "string.h"
 
+//TAMAÑOS DE EL MAPA
 #define HEIGHT 46
-#define WIDTH 91
+#define WIDTH 93
 #define DEPTH 10
 
+//TABLA ASCII PARA DIBUJO DE LA BASE
 #define ASCII_VER 186
 #define ASCII_HOR 205
 #define ASCII_IRC 188
@@ -14,6 +16,7 @@
 #define ASCII_SRC 187
 #define ASCII_SLC 201
 
+//TABLA ASCII PARA NOMBRE DE CADA BASE
 #define ASCII_BMAYUS 66
 #define ASCII_A 97
 #define ASCII_S 115
@@ -21,7 +24,7 @@
 #define ASCII_NUM 35
 
 
-
+//ESTRUCTU
 typedef struct base_data {
   char id;
   int x;
@@ -138,7 +141,7 @@ void printMap(char map[HEIGHT][WIDTH][DEPTH]){
   basesGeneration(map);
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
-      printf("%s", map[i][j]);
+      printf("%1s", map[i][j]);
     }
     printf("\n");
   }
@@ -148,13 +151,14 @@ void clearMap(char map[HEIGHT][WIDTH][DEPTH]){
   for (int i = 0; i < HEIGHT; i++) {
     for (int j = 0; j < WIDTH; j++) {
       for (int k = 0; k < DEPTH; k++) {
-        map[i][j][k] = 42;
+        map[i][j][k] = 0;
       }
     }
   }
 }
 
 void createBase(char map[HEIGHT][WIDTH][DEPTH], bd data) {
+
   char color[9];
   if (data.id == 51) {
     strcpy (color, "\033[0;31m");
@@ -164,11 +168,14 @@ void createBase(char map[HEIGHT][WIDTH][DEPTH], bd data) {
 
   //strcat(color, "\201");
   strcpy(map[data.y - 1][data.x - 1], color);
+
+  //BASE CORNERS
   map[data.y][data.x][0] = ASCII_SLC;
   map[data.y + data.h ][data.x][0] = ASCII_ILC; //CHECK SIZE
   map[data.y][data.x + data.w][0] = ASCII_SRC;
   map[data.y + data.h ][data.x + data.w][0] = ASCII_IRC;
 
+  //BASE LINES
   for (int i = 1; i < data.h; i++) { //CHECK SIZE
     map[data.y + i][data.x][0] = ASCII_VER;
 
@@ -180,7 +187,6 @@ void createBase(char map[HEIGHT][WIDTH][DEPTH], bd data) {
     map[data.y + data.h][data.x + i][0] = ASCII_HOR; //CHECK SIZE
   }
   nameBase(data, map);
-
 }
 
 
@@ -200,7 +206,7 @@ void nameBase(bd data, char map[HEIGHT][WIDTH][DEPTH]){
         map[data.y + 1][data.x + i][0] = ASCII_E;
         break;
       case 5:
-        map[data.y + 1][data.x + i][0] = 42;
+        map[data.y + 1][data.x + i][0] = 0;
         break;
       case 6:
         map[data.y + 1][data.x + i][0] = ASCII_NUM;
