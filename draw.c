@@ -24,6 +24,10 @@
 #define ASCII_NUM 35
 
 
+
+
+
+
 //ESTRUCTU
 typedef struct base_data {
   char id;
@@ -33,9 +37,7 @@ typedef struct base_data {
   int h;
 } bd;
 
-typedef struct play_data{
-  int turn;
-} pd;
+
 /*[0;31m	Red
 [1;31m	Bold Red
 [0;32m	Green
@@ -56,6 +58,7 @@ void colors();
 
 void createBase(char[HEIGHT][WIDTH][DEPTH], bd);
 void basesGeneration(char[HEIGHT][WIDTH][DEPTH]);
+void colorBase(char[HEIGHT][WIDTH][DEPTH], bd);
 
 void clearMap(char[HEIGHT][WIDTH][DEPTH]);
 void printMap(char[HEIGHT][WIDTH][DEPTH]);
@@ -159,16 +162,6 @@ void clearMap(char map[HEIGHT][WIDTH][DEPTH]){
 
 void createBase(char map[HEIGHT][WIDTH][DEPTH], bd data) {
 
-  char color[9];
-  if (data.id == 51) {
-    strcpy (color, "\033[0;31m");
-  }else{
-    strcpy (color, "\033[0;34m");
-  }
-
-  //strcat(color, "\201");
-  strcpy(map[data.y - 1][data.x - 1], color);
-
   //BASE CORNERS
   map[data.y][data.x][0] = ASCII_SLC;
   map[data.y + data.h ][data.x][0] = ASCII_ILC; //CHECK SIZE
@@ -187,8 +180,22 @@ void createBase(char map[HEIGHT][WIDTH][DEPTH], bd data) {
     map[data.y + data.h][data.x + i][0] = ASCII_HOR; //CHECK SIZE
   }
   nameBase(data, map);
+  colorBase(map, data);
 }
 
+void colorBase(char map[HEIGHT][WIDTH][DEPTH], bd data){
+  char color[9], reset[9];
+  if (data.id == 51) {
+    strcpy (color, "\033[0;33m");
+  }else if (data.id == 54){
+    strcpy (color, "\033[0;34m");
+  }
+  strcpy (reset, "\033[0m");
+  for (int i = -1; i <= data.h; i++) {
+    strcpy(map[data.y + i][data.x - 1], color);
+    strcpy(map[data.y + i][data.x + data.w + 1], reset);
+  }
+}
 
 void nameBase(bd data, char map[HEIGHT][WIDTH][DEPTH]){
   for (int i = 1; i < 8; i++) {
